@@ -1,0 +1,34 @@
+.room {
+  color: white;
+  background: #161616;
+  border: 2px solid #0a0a0a;
+  border-radius: 10px;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.roomNameHeader {
+  margin-left: 10px;
+}
+
+.deleteBtn {
+  margin-left: 30px;
+}
+
+.deleteIcon {
+  color: red;
+}
+
+.deleteIcon:hover {
+  cursor: pointer;
+}

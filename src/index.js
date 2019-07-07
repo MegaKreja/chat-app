@@ -1,12 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Main from './components/Main/Main';
+import Login from './components/Login/Login';
+import Chat from './components/Chat/Chat';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const routes = (
+  <Router>
+    <div>
+      <Route path='/' exact component={Main} />
+      <Route path='/login' component={Login} />
+      <Route path='/chat/:id' component={Chat} />
+    </div>
+  </Router>
+);
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(routes, document.getElementById('root'));

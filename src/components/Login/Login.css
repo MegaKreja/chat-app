@@ -1,0 +1,31 @@
+.login {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.login h1 {
+  color: white;
+}
+
+.loginInput {
+  width: 80%;
+  border: 2px solid #0a0a0a;
+  font-size: 2rem;
+}
+
+.btnLogin {
+  width: 100px;
+  margin: 0 auto;
+  margin-top: 20px;
+  border: 5px solid #0b6623;
+  color: white;
+}
+
+.btnLogin:hover {
+  background-color: #0b6623;
+  transition: 0.2s;
+}
