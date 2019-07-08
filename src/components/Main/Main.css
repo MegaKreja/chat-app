@@ -1,5 +1,31 @@
-.main {
+.rooms {
   width: 70%;
   margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   text-align: center;
+}
+
+.header {
+  margin: 20px;
+  font-size: 20px;
+}
+
+.changeProfile {
+  float: right;
+  color: #67676a;
+  text-decoration: none;
+}
+
+.changeProfile:hover {
+  color: white;
+  transition: 0.2s;
+}
+
+.welcome {
+  display: inline-block;
+  color: #67676a;
 }

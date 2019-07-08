@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Room from '../Room/Room';
 import AddRoom from '../AddRoom/AddRoom';
@@ -14,6 +15,7 @@ class Main extends Component {
 
   componentDidMount() {
     const jwt = localStorage.getItem('jwtToken');
+    console.log(jwt);
     if (!jwt) {
       this.props.history.push('/login');
     } else {
@@ -23,7 +25,8 @@ class Main extends Component {
         })
         .then(res => {
           this.setState({ loggedUser: res.data });
-        });
+        })
+        .catch(err => this.props.history.push('/login'));
       axios.get('http://localhost:8000/').then(res => {
         this.setState({ rooms: res.data.rooms });
       });
@@ -94,15 +97,23 @@ class Main extends Component {
     return (
       <div className='main'>
         <Fragment>
-          {rooms}
-          <AddRoom
-            addingRoom={this.state.addingRoom}
-            changeRoomName={this.onChangeRoomName}
-            openInput={this.openInput}
-            addRoom={this.addRoom}
-            cancelAddingRoom={this.cancelAddingRoom}
-            roomName={this.state.roomName}
-          />
+          <div className='header'>
+            <p className='welcome'>Welcome {this.state.loggedUser.username}</p>
+            <Link className='changeProfile' to='/login'>
+              <p>Change profile</p>
+            </Link>
+          </div>
+          <div className='rooms'>
+            {rooms}
+            <AddRoom
+              addingRoom={this.state.addingRoom}
+              changeRoomName={this.onChangeRoomName}
+              openInput={this.openInput}
+              addRoom={this.addRoom}
+              cancelAddingRoom={this.cancelAddingRoom}
+              roomName={this.state.roomName}
+            />
+          </div>
         </Fragment>
       </div>
     );
