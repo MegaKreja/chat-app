@@ -1,10 +1,16 @@
 .room {
   color: white;
-  background: #161616;
+  background: #272727;
   border: 2px solid #0a0a0a;
   border-radius: 10px;
   overflow: auto;
   white-space: nowrap;
+}
+
+.room:hover {
+  cursor: pointer;
+  transition: 0.2s;
+  border-color: white;
 }
 
 .inline {

@@ -21,6 +21,7 @@ const AddRoom = props => {
   const addInput = (
     <div className='addFormInput'>
       <input
+        placeholder='Add a room...'
         className='addInput'
         onChange={changeRoomName}
         value={roomName}

@@ -52,6 +52,5 @@ exports.getUser = (req, res) => {
   const usertoken = req.headers.authorization;
   const token = usertoken.split(' ');
   const decoded = jwt.verify(token[1], process.env.SECRET);
-  console.log(decoded);
   res.status(200).json({ _id: decoded._id, username: decoded.username });
 };
