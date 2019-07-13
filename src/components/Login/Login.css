@@ -15,6 +15,13 @@
   width: 80%;
   border: 2px solid #0a0a0a;
   font-size: 2rem;
+  background: #272727;
+  color: white;
+}
+
+.loginInput::placeholder {
+  color: #666464;
+  font-size: 1.5rem;
 }
 
 .btnLogin {

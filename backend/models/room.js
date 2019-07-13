@@ -14,7 +14,7 @@ const roomSchema = new Schema({
     type: String,
     required: true
   },
-  messages: []
+  messages: [Object]
 });
 
 module.exports = mongoose.model('Room', roomSchema);

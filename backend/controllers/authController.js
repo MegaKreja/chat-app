@@ -31,7 +31,7 @@ exports.loginUser = (req, res, next) => {
           },
           process.env.SECRET,
           {
-            expiresIn: '1h'
+            expiresIn: '6h'
           }
         );
         res.status(200).json({

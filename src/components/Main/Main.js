@@ -55,7 +55,8 @@ class Main extends Component {
     axios.post('http://localhost:8000/add', room).then(res => {
       this.setState({
         rooms: [...this.state.rooms, res.data.room],
-        addingRoom: false
+        addingRoom: false,
+        roomName: ''
       });
     });
   };

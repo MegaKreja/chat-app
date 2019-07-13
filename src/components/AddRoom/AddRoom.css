@@ -23,12 +23,11 @@
   font-size: 2rem;
   background: #272727;
   color: white;
-  min-height: calc(100vh - 40px);
 }
 
 .addInput::placeholder {
   color: #666464;
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .addButtons {
