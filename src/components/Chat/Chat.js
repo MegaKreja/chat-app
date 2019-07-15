@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ChatMessages from '../ChatMessages/ChatMessages';
 import io from 'socket.io-client';
 import axios from 'axios';
 import './Chat.css';
@@ -8,7 +9,8 @@ class Chat extends Component {
     room: {},
     loggedUser: {},
     message: '',
-    messages: []
+    messages: [],
+    typing: false
   };
 
   componentDidUpdate() {
@@ -23,30 +25,42 @@ class Chat extends Component {
       this.props.history.push('/login');
     } else {
       this.setState({ room: this.props.location.state.room });
-      socket.on('send message', message => {
-        this.setState({
-          message: '',
-          messages: [...this.state.messages, message]
-        });
-      });
-      axios
-        .get(
-          `http://localhost:8000/messages/${this.props.location.state.room._id}`
-        )
-        .then(res => {
-          console.log(res.data);
-          this.setState({ messages: res.data.messages });
-        });
-      axios
-        .get('http://localhost:8000/getuser', {
-          headers: { Authorization: `Bearer ${jwt}` }
-        })
-        .then(res => {
-          this.setState({ loggedUser: res.data });
-        })
-        .catch(err => this.props.history.push('/login'));
+      this.socketSendMessage(socket);
+      this.getMessages();
+      this.getUser(jwt);
     }
   }
+
+  socketSendMessage = socket => {
+    socket.on('send message', message => {
+      this.setState({
+        message: '',
+        messages: [...this.state.messages, message]
+      });
+    });
+  };
+
+  getUser = jwt => {
+    axios
+      .get('http://localhost:8000/getuser', {
+        headers: { Authorization: `Bearer ${jwt}` }
+      })
+      .then(res => {
+        this.setState({ loggedUser: res.data });
+      })
+      .catch(err => this.props.history.push('/login'));
+  };
+
+  getMessages = () => {
+    axios
+      .get(
+        `http://localhost:8000/messages/${this.props.location.state.room._id}`
+      )
+      .then(res => {
+        console.log(res.data);
+        this.setState({ messages: res.data.messages });
+      });
+  };
 
   handleSendMessage = event => {
     const socket = io.connect('http://localhost:8000');
@@ -68,15 +82,6 @@ class Chat extends Component {
 
   render() {
     const { color, name } = this.state.room;
-    const messages = this.state.messages.map((msg, i) => {
-      return (
-        <div key={i}>
-          <p>{msg.date}</p>
-          <p>{msg.username}</p>
-          <h2>{msg.message}</h2>
-        </div>
-      );
-    });
 
     return (
       <div className='chat'>
@@ -85,8 +90,10 @@ class Chat extends Component {
           <h1 className='inline roomNameHeader'>{name}</h1>
           {/* users in chat */}
         </div>
-        {/* text area component with messages dole */}
-        <div className='messages'>{messages}</div>
+        <ChatMessages
+          messages={this.state.messages}
+          username={this.state.loggedUser.username}
+        />
         <div className='send'>
           <input
             type='text'

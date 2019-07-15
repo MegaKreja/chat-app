@@ -19,23 +19,31 @@ class Main extends Component {
     if (!jwt) {
       this.props.history.push('/login');
     } else {
-      axios
-        .get('http://localhost:8000/getuser', {
-          headers: { Authorization: `Bearer ${jwt}` }
-        })
-        .then(res => {
-          this.setState({ loggedUser: res.data });
-        })
-        .catch(err => this.props.history.push('/login'));
-      axios.get('http://localhost:8000/').then(res => {
-        this.setState({ rooms: res.data.rooms });
-      });
+      this.getUser(jwt);
+      this.getRooms();
     }
   }
 
   componentDidUpdate() {
     console.log(this.state);
   }
+
+  getUser = jwt => {
+    axios
+      .get('http://localhost:8000/getuser', {
+        headers: { Authorization: `Bearer ${jwt}` }
+      })
+      .then(res => {
+        this.setState({ loggedUser: res.data });
+      })
+      .catch(err => this.props.history.push('/login'));
+  };
+
+  getRooms = () => {
+    axios.get('http://localhost:8000/').then(res => {
+      this.setState({ rooms: res.data.rooms });
+    });
+  };
 
   addRoom = () => {
     const randomColor =

@@ -1,0 +1,56 @@
+.chatMessages {
+  width: 80%;
+  height: 80vh;
+  margin: 0 auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.chatMessage {
+  margin-left: 1%;
+}
+
+.chatMessage.user {
+  /* float: right;
+  clear: right; */
+  /* margin-right: 1%; */
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 1%;
+  /* margin-left: auto;
+  display: block;
+  width: 10%; */
+  /* display: flex;
+  flex-direction: row-reverse; */
+}
+
+.chatBubble {
+  background: #272727;
+  width: max-content;
+  padding: 0.5% 4%;
+  border-radius: 10px;
+  color: white;
+}
+
+.chatBubble.long {
+  width: 50%;
+  word-wrap: break-word;
+}
+
+.chatBubble.user {
+  background: #6c80c6;
+  margin-right: 1%;
+  margin-bottom: 1%;
+}
+
+.messageInfo.user {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 1%;
+}
+
+.messageInfo p {
+  color: #67676a;
+  text-align: left;
+  margin: 0;
+}
