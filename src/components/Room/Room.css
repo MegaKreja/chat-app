@@ -5,6 +5,7 @@
   border-radius: 10px;
   overflow: auto;
   white-space: nowrap;
+  margin: 0 auto;
 }
 
 .room:hover {

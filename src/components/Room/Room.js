@@ -19,13 +19,13 @@ const Room = props => {
       <div className='room'>
         <div className='avatar inline' style={{ backgroundColor: color }} />
         <h1 className='inline roomNameHeader'>{name}</h1>
-        <Link to='/'>
-          {_.isEqual(props.loggedUser, user) && (
-            <div className='inline deleteBtn' onClick={props.deleteRoom}>
-              <FaTrashAlt className='deleteIcon' />
-            </div>
-          )}
-        </Link>
+        {/* <Link to='/'> */}
+        {_.isEqual(props.loggedUser, user) && (
+          <div className='inline deleteBtn' onClick={props.deleteRoom}>
+            <FaTrashAlt className='deleteIcon' />
+          </div>
+        )}
+        {/* </Link> */}
       </div>
     </Link>
   );

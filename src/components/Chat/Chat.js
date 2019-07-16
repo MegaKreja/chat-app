@@ -20,7 +20,7 @@ class Chat extends Component {
   componentDidMount() {
     const socket = io.connect('http://localhost:8000');
     const jwt = localStorage.getItem('jwtToken');
-    console.log(this.props.location.state);
+    console.log(this.props.match.params.id);
     if (!jwt) {
       this.props.history.push('/login');
     } else {
@@ -37,6 +37,8 @@ class Chat extends Component {
         message: '',
         messages: [...this.state.messages, message]
       });
+      const list = document.getElementById('list');
+      list.scrollTop = list.scrollHeight;
     });
   };
 
@@ -57,7 +59,6 @@ class Chat extends Component {
         `http://localhost:8000/messages/${this.props.location.state.room._id}`
       )
       .then(res => {
-        console.log(res.data);
         this.setState({ messages: res.data.messages });
       });
   };

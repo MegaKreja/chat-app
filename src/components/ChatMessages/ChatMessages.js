@@ -33,7 +33,11 @@ const ChatMessages = props => {
     );
   });
 
-  return <div className='chatMessages'>{chatMessages}</div>;
+  return (
+    <div id='list' className='chatMessages'>
+      {chatMessages}
+    </div>
+  );
 };
 
 export default ChatMessages;

@@ -2,8 +2,10 @@
   width: 80%;
   height: 80vh;
   margin: 0 auto;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
+  position: sticky;
+  bottom: 0;
 }
 
 .chatMessage {
@@ -11,17 +13,9 @@
 }
 
 .chatMessage.user {
-  /* float: right;
-  clear: right; */
-  /* margin-right: 1%; */
   display: flex;
   justify-content: flex-end;
   margin-right: 1%;
-  /* margin-left: auto;
-  display: block;
-  width: 10%; */
-  /* display: flex;
-  flex-direction: row-reverse; */
 }
 
 .chatBubble {

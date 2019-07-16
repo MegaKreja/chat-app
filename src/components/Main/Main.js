@@ -69,6 +69,13 @@ class Main extends Component {
     });
   };
 
+  addRoomKeyPress = event => {
+    console.log(event);
+    if (event.key === 'Enter') {
+      this.addRoom();
+    }
+  };
+
   cancelAddingRoom = () => {
     this.setState({ addingRoom: false, roomName: '' });
   };
@@ -81,9 +88,11 @@ class Main extends Component {
     this.setState({ roomName: e.target.value });
   };
 
-  deleteRoom = id => {
+  deleteRoom = (id, e) => {
+    e.preventDefault();
     axios.delete('http://localhost:8000/' + id).then(res => {
       console.log(res);
+      this.props.history.push('/');
     });
     const rooms = this.state.rooms.filter(room => {
       return id !== room._id;
@@ -96,7 +105,7 @@ class Main extends Component {
       return (
         <Room
           room={room}
-          deleteRoom={() => this.deleteRoom(room._id)}
+          deleteRoom={e => this.deleteRoom(room._id, e)}
           key={i}
           loggedUser={this.state.loggedUser}
         />
@@ -119,6 +128,7 @@ class Main extends Component {
               changeRoomName={this.onChangeRoomName}
               openInput={this.openInput}
               addRoom={this.addRoom}
+              addRoomKeyPress={this.addRoomKeyPress}
               cancelAddingRoom={this.cancelAddingRoom}
               roomName={this.state.roomName}
             />

@@ -8,6 +8,7 @@ const AddRoom = props => {
     cancelAddingRoom,
     roomName,
     addRoom,
+    addRoomKeyPress,
     changeRoomName,
     addingRoom
   } = props;
@@ -24,8 +25,10 @@ const AddRoom = props => {
         placeholder='Add a room...'
         className='addInput'
         onChange={changeRoomName}
+        onKeyPress={addRoomKeyPress}
         value={roomName}
         type='text'
+        autoFocus
       />
       <div className='addButtons'>
         <div className='btnOk inline' onClick={addRoom}>

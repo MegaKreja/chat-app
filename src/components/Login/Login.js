@@ -22,6 +22,12 @@ class Login extends Component {
       .catch(err => this.props.history.push('/login'));
   };
 
+  loginUserKeyPress = event => {
+    if (event.key === 'Enter') {
+      this.loginUser();
+    }
+  };
+
   onChangeLoggedUser = e => {
     this.setState({ username: e.target.value });
   };
@@ -34,8 +40,13 @@ class Login extends Component {
           className='loginInput'
           type='text'
           onChange={this.onChangeLoggedUser}
+          autoFocus
         />
-        <div className='btnLogin' onClick={this.loginUser}>
+        <div
+          className='btnLogin'
+          onClick={this.loginUser}
+          onKeyPress={this.loginUserKeyPress}
+        >
           <FaCheck />
         </div>
       </div>
