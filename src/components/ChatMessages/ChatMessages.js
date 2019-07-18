@@ -2,7 +2,9 @@ import React, { Fragment } from 'react';
 import './ChatMessages.css';
 
 const ChatMessages = props => {
-  const { username, messages } = props;
+  let typingInfo = null;
+  const { username, messages, typing } = props;
+  console.log(typing);
   const chatMessages = messages.map((msg, i) => {
     return (
       <Fragment key={i}>
@@ -33,9 +35,20 @@ const ChatMessages = props => {
     );
   });
 
+  if (typing) {
+    typingInfo = typing.map((user, i) => {
+      return (
+        <p className='typing' key={i}>
+          {user} is typing...
+        </p>
+      );
+    });
+  }
+
   return (
     <div id='list' className='chatMessages'>
       {chatMessages}
+      {typingInfo ? typingInfo : ''}
     </div>
   );
 };

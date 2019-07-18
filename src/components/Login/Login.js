@@ -40,13 +40,10 @@ class Login extends Component {
           className='loginInput'
           type='text'
           onChange={this.onChangeLoggedUser}
+          onKeyPress={this.loginUserKeyPress}
           autoFocus
         />
-        <div
-          className='btnLogin'
-          onClick={this.loginUser}
-          onKeyPress={this.loginUserKeyPress}
-        >
+        <div className='btnLogin' onClick={this.loginUser}>
           <FaCheck />
         </div>
       </div>

@@ -34,11 +34,20 @@ app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
-  console.log(status, message, data);
   res.status(status).json({ message: message, data: data });
 });
 
 io.on('connection', socket => {
+  // io.clients((error, clients) => {
+  //   if (error) throw error;
+  //   // console.log(clients);
+  //   socket.on('send user', data => {
+  //     const users = [];
+  //     users.push(data);
+  //     // console.log(data);
+  //     io.emit('send user', data);
+  //   });
+  // });
   socket.on('send message', data => {
     console.log(`${data.username}: ${data.message}`);
     const { username, message, date } = data;
@@ -58,6 +67,12 @@ io.on('connection', socket => {
       room.messages = messages;
       room.save();
     });
+  });
+  socket.on('user typing', data => {
+    io.emit('user typing', data);
+  });
+  socket.on('user not typing', data => {
+    io.emit('user not typing', data);
   });
 });
 

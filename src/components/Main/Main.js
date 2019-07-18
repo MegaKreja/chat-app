@@ -70,7 +70,6 @@ class Main extends Component {
   };
 
   addRoomKeyPress = event => {
-    console.log(event);
     if (event.key === 'Enter') {
       this.addRoom();
     }

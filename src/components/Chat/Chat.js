@@ -4,13 +4,16 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import './Chat.css';
 
+const socket = io.connect('http://localhost:8000');
+
 class Chat extends Component {
   state = {
     room: {},
     loggedUser: {},
+    users: [],
     message: '',
-    messages: [],
-    typing: false
+    typing: [],
+    messages: []
   };
 
   componentDidUpdate() {
@@ -18,21 +21,55 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    const socket = io.connect('http://localhost:8000');
     const jwt = localStorage.getItem('jwtToken');
     console.log(this.props.match.params.id);
     if (!jwt) {
       this.props.history.push('/login');
     } else {
       this.setState({ room: this.props.location.state.room });
+      this.getUser(jwt);
+      this.userIsTyping();
+      this.userNotTyping();
       this.socketSendMessage(socket);
       this.getMessages();
-      this.getUser(jwt);
     }
   }
+  // Try to get all users in a room
+  // getUsersInRoom = () => {
+  //   const username = this.state.loggedUser;
+  //   socket.emit('send user', username);
+  //   socket.on('send user', users => {
+  //     console.log(users);
+  //   });
+  // };
+
+  userIsTyping = () => {
+    let typing = this.state.typing.slice();
+    socket.on('user typing', user => {
+      if (this.state.loggedUser.username !== user) {
+        typing.push(user);
+        typing = typing.filter((x, i, a) => a.indexOf(x) === i);
+        console.log(typing);
+        this.setState({ typing });
+      }
+    });
+  };
+
+  userNotTyping = () => {
+    let typing = this.state.typing.slice();
+    socket.on('user not typing', user => {
+      typing.filter(typingUser => {
+        return user === typingUser;
+      });
+      console.log(typing);
+      this.setState({ typing });
+    });
+  };
 
   socketSendMessage = socket => {
+    const username = this.state.loggedUser.username;
     socket.on('send message', message => {
+      socket.emit('user not typing', username);
       this.setState({
         message: '',
         messages: [...this.state.messages, message]
@@ -49,6 +86,7 @@ class Chat extends Component {
       })
       .then(res => {
         this.setState({ loggedUser: res.data });
+        // this.getUsersInRoom();
       })
       .catch(err => this.props.history.push('/login'));
   };
@@ -60,11 +98,12 @@ class Chat extends Component {
       )
       .then(res => {
         this.setState({ messages: res.data.messages });
+        const list = document.getElementById('list');
+        list.scrollTop = list.scrollHeight;
       });
   };
 
   handleSendMessage = event => {
-    const socket = io.connect('http://localhost:8000');
     const { username } = this.state.loggedUser;
     const sending = {
       username,
@@ -74,11 +113,19 @@ class Chat extends Component {
     };
     if (event.key === 'Enter') {
       socket.emit('send message', sending);
+      this.setState({ typing: '' });
     }
   };
 
   onChangeMessageInput = e => {
-    this.setState({ message: e.target.value });
+    const username = this.state.loggedUser.username;
+    this.setState({ message: e.target.value }, () => {
+      if (this.state.message !== '') {
+        socket.emit('user typing', username);
+      } else {
+        socket.emit('user not typing', username);
+      }
+    });
   };
 
   render() {
@@ -94,6 +141,7 @@ class Chat extends Component {
         <ChatMessages
           messages={this.state.messages}
           username={this.state.loggedUser.username}
+          typing={this.state.typing}
         />
         <div className='send'>
           <input
