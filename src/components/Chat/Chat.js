@@ -26,13 +26,19 @@ class Chat extends Component {
     if (!jwt) {
       this.props.history.push('/login');
     } else {
-      this.setState({ room: this.props.location.state.room });
-      this.getUser(jwt);
-      this.userIsTyping();
-      this.userNotTyping();
-      this.socketSendMessage(socket);
-      this.getMessages();
+      this.setState({ room: this.props.location.state.room }, () => {
+        socket.emit('join', this.state.room.name);
+        this.getUser(jwt);
+        this.userIsTyping();
+        this.userNotTyping();
+        this.socketSendMessage(socket);
+        this.getMessages();
+      });
     }
+  }
+
+  componentWillUnmount() {
+    socket.emit('leave', this.state.room.name);
   }
   // Try to get all users in a room
   // getUsersInRoom = () => {
@@ -61,15 +67,17 @@ class Chat extends Component {
       typing.filter(typingUser => {
         return user === typingUser;
       });
-      console.log(typing);
       this.setState({ typing });
     });
   };
 
   socketSendMessage = socket => {
-    const username = this.state.loggedUser.username;
+    const typingInfo = {
+      username: this.state.loggedUser.username,
+      roomName: this.state.room.name
+    };
     socket.on('send message', message => {
-      socket.emit('user not typing', username);
+      socket.emit('user not typing', typingInfo);
       this.setState({
         message: '',
         messages: [...this.state.messages, message]
@@ -93,14 +101,13 @@ class Chat extends Component {
 
   getMessages = () => {
     axios
-      .get(
-        `http://localhost:8000/messages/${this.props.location.state.room._id}`
-      )
+      .get(`http://localhost:8000/chat/${this.props.match.params.id}`)
       .then(res => {
         this.setState({ messages: res.data.messages });
         const list = document.getElementById('list');
         list.scrollTop = list.scrollHeight;
-      });
+      })
+      .catch(err => this.props.history.push('/'));
   };
 
   handleSendMessage = event => {
@@ -118,12 +125,15 @@ class Chat extends Component {
   };
 
   onChangeMessageInput = e => {
-    const username = this.state.loggedUser.username;
+    const typingInfo = {
+      username: this.state.loggedUser.username,
+      roomName: this.state.room.name
+    };
     this.setState({ message: e.target.value }, () => {
       if (this.state.message !== '') {
-        socket.emit('user typing', username);
+        socket.emit('user typing', typingInfo);
       } else {
-        socket.emit('user not typing', username);
+        socket.emit('user not typing', typingInfo);
       }
     });
   };

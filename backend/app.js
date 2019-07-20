@@ -38,16 +38,18 @@ app.use((error, req, res, next) => {
 });
 
 io.on('connection', socket => {
-  // io.clients((error, clients) => {
-  //   if (error) throw error;
-  //   // console.log(clients);
-  //   socket.on('send user', data => {
-  //     const users = [];
-  //     users.push(data);
-  //     // console.log(data);
-  //     io.emit('send user', data);
-  //   });
-  // });
+  io.of('/')
+    .in('soba')
+    .clients((error, clients) => {
+      if (error) throw error;
+      console.log(clients); // => [Anw2LatarvGVVXEIAAAD]
+    });
+  socket.on('join', room => {
+    socket.join(room);
+  });
+  socket.on('leave', room => {
+    socket.leave(room);
+  });
   socket.on('send message', data => {
     console.log(`${data.username}: ${data.message}`);
     const { username, message, date } = data;
@@ -56,7 +58,7 @@ io.on('connection', socket => {
       message,
       date
     };
-    io.emit('send message', sending);
+    io.to(data.room.name).emit('send message', sending);
     Room.findOne({ _id: data.room._id }).then(room => {
       const messages = [...room.messages];
       messages.push({
@@ -69,10 +71,12 @@ io.on('connection', socket => {
     });
   });
   socket.on('user typing', data => {
-    io.emit('user typing', data);
+    console.log(data);
+    io.to(data.roomName).emit('user typing', data.username);
   });
   socket.on('user not typing', data => {
-    io.emit('user not typing', data);
+    console.log(data);
+    io.to(data.roomName).emit('user not typing', data.username);
   });
 });
 
