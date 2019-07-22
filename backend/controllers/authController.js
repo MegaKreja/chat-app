@@ -3,7 +3,6 @@ const User = require('../models/user');
 
 exports.loginUser = (req, res, next) => {
   const username = req.body.username;
-  console.log(username);
   User.findOne({ username })
     .then(user => {
       if (!user) {

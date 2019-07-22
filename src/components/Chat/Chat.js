@@ -27,27 +27,37 @@ class Chat extends Component {
       this.props.history.push('/login');
     } else {
       this.setState({ room: this.props.location.state.room }, () => {
-        socket.emit('join', this.state.room.name);
         this.getUser(jwt);
         this.userIsTyping();
         this.userNotTyping();
         this.socketSendMessage(socket);
         this.getMessages();
+        this.getUsersInRoom();
+        this.getUsersLeavingRoom();
       });
     }
   }
 
   componentWillUnmount() {
-    socket.emit('leave', this.state.room.name);
+    const leaving = {
+      user: this.state.loggedUser.username,
+      room: this.state.room
+    };
+    socket.emit('leave', leaving);
+    this.setState({ users: [] });
   }
   // Try to get all users in a room
-  // getUsersInRoom = () => {
-  //   const username = this.state.loggedUser;
-  //   socket.emit('send user', username);
-  //   socket.on('send user', users => {
-  //     console.log(users);
-  //   });
-  // };
+  getUsersInRoom = () => {
+    socket.on('join', users => {
+      this.setState({ users });
+    });
+  };
+
+  getUsersLeavingRoom = () => {
+    socket.on('leave', users => {
+      this.setState({ users });
+    });
+  };
 
   userIsTyping = () => {
     let typing = this.state.typing.slice();
@@ -94,7 +104,11 @@ class Chat extends Component {
       })
       .then(res => {
         this.setState({ loggedUser: res.data });
-        // this.getUsersInRoom();
+        const joining = {
+          user: this.state.loggedUser.username,
+          room: this.state.room
+        };
+        socket.emit('join', joining);
       })
       .catch(err => this.props.history.push('/login'));
   };
@@ -140,13 +154,16 @@ class Chat extends Component {
 
   render() {
     const { color, name } = this.state.room;
+    const users = this.state.users.map((user, i) => {
+      return <p key={i}>{user}</p>;
+    });
 
     return (
       <div className='chat'>
         <div className='roomName'>
           <div className='avatar inline' style={{ backgroundColor: color }} />
           <h1 className='inline roomNameHeader'>{name}</h1>
-          {/* users in chat */}
+          {users}
         </div>
         <ChatMessages
           messages={this.state.messages}

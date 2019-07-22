@@ -12,6 +12,9 @@ const roomRoutes = require('./routes/room');
 const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 
+// global array for displaying users connected in room
+let users = [];
+
 require('dotenv').config();
 
 app.use(bodyParser.json());
@@ -38,17 +41,23 @@ app.use((error, req, res, next) => {
 });
 
 io.on('connection', socket => {
-  io.of('/')
-    .in('soba')
-    .clients((error, clients) => {
-      if (error) throw error;
-      console.log(clients); // => [Anw2LatarvGVVXEIAAAD]
-    });
-  socket.on('join', room => {
-    socket.join(room);
+  socket.on('join', data => {
+    socket.join(data.room.name);
+    console.log(data.user);
+    users.push(data.user);
+    // users = [];
+    console.log(users);
+    users = users.filter((x, i, a) => a.indexOf(x) === i);
+    io.to(data.room.name).emit('join', users);
+
+    console.log(users);
   });
-  socket.on('leave', room => {
-    socket.leave(room);
+  socket.on('leave', data => {
+    socket.leave(data.room.name);
+    users = users.filter(user => {
+      return user !== data.user;
+    });
+    io.to(data.room.name).emit('leave', users);
   });
   socket.on('send message', data => {
     console.log(`${data.username}: ${data.message}`);
@@ -71,11 +80,9 @@ io.on('connection', socket => {
     });
   });
   socket.on('user typing', data => {
-    console.log(data);
     io.to(data.roomName).emit('user typing', data.username);
   });
   socket.on('user not typing', data => {
-    console.log(data);
     io.to(data.roomName).emit('user not typing', data.username);
   });
 });
