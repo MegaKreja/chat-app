@@ -98,6 +98,7 @@ class Chat extends Component {
   };
 
   getUser = jwt => {
+    // fix this
     axios
       .get('http://localhost:8000/getuser', {
         headers: { Authorization: `Bearer ${jwt}` }
@@ -155,7 +156,11 @@ class Chat extends Component {
   render() {
     const { color, name } = this.state.room;
     const users = this.state.users.map((user, i) => {
-      return <p key={i}>{user}</p>;
+      return (
+        <p className='connectedUsers' key={i}>
+          {user}
+        </p>
+      );
     });
 
     return (

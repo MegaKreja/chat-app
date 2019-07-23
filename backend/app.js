@@ -13,7 +13,9 @@ const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 
 // global array for displaying users connected in room
-let users = [];
+// let users = [];
+// object which collects users per room
+let roomUsers = {};
 
 require('dotenv').config();
 
@@ -42,25 +44,33 @@ app.use((error, req, res, next) => {
 
 io.on('connection', socket => {
   socket.on('join', data => {
-    socket.join(data.room.name);
-    console.log(data.user);
-    users.push(data.user);
+    const { room, user } = data;
+    socket.join(room.name);
+    if (roomUsers[room.name] === undefined) {
+      roomUsers[room.name] = { users: [] };
+    }
+    console.log(roomUsers);
+    let users = roomUsers[room.name].users;
+    users.push(user);
     // users = [];
-    console.log(users);
     users = users.filter((x, i, a) => a.indexOf(x) === i);
-    io.to(data.room.name).emit('join', users);
 
-    console.log(users);
+    roomUsers[room.name].users = users;
+    // roomUsers = {};
+    console.log(roomUsers[room.name]);
+    io.to(room.name).emit('join', roomUsers[room.name].users);
   });
   socket.on('leave', data => {
-    socket.leave(data.room.name);
-    users = users.filter(user => {
-      return user !== data.user;
+    const { room, user } = data;
+    socket.leave(room.name);
+    let users = roomUsers[room.name].users;
+    users = users.filter(username => {
+      return username !== user;
     });
-    io.to(data.room.name).emit('leave', users);
+    roomUsers[room.name].users = users;
+    io.to(room.name).emit('leave', roomUsers[room.name].users);
   });
   socket.on('send message', data => {
-    console.log(`${data.username}: ${data.message}`);
     const { username, message, date } = data;
     const sending = {
       username,
