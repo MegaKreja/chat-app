@@ -13,8 +13,7 @@ const ChatMessages = props => {
       `}
         >
           <p>
-            {msg.username !== username && msg.username + ','}{' '}
-            {msg.date.split(' ')[1]}
+            {msg.username !== username && msg.username + ','} {msg.date}
           </p>
         </div>
         <div

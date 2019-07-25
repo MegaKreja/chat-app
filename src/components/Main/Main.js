@@ -34,7 +34,11 @@ class Main extends Component {
         headers: { Authorization: `Bearer ${jwt}` }
       })
       .then(res => {
-        this.setState({ loggedUser: res.data });
+        if (res.data.expired) {
+          this.props.history.push('/login');
+        } else {
+          this.setState({ loggedUser: res.data });
+        }
       })
       .catch(err => this.props.history.push('/login'));
   };

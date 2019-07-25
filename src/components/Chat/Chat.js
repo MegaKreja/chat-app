@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ChatMessages from '../ChatMessages/ChatMessages';
 import io from 'socket.io-client';
+import { isMobile } from 'react-device-detect';
+import { FaTelegramPlane } from 'react-icons/fa';
 import axios from 'axios';
 import './Chat.css';
 
@@ -67,6 +69,8 @@ class Chat extends Component {
         typing = typing.filter((x, i, a) => a.indexOf(x) === i);
         console.log(typing);
         this.setState({ typing });
+        // const list = document.getElementById('list');
+        // list.scrollTop = list.scrollHeight;
       }
     });
   };
@@ -139,6 +143,18 @@ class Chat extends Component {
     }
   };
 
+  handleClickSendMessage = () => {
+    const { username } = this.state.loggedUser;
+    const sending = {
+      username,
+      message: this.state.message,
+      date: new Date().toLocaleString('en-GB'),
+      room: this.state.room
+    };
+    socket.emit('send message', sending);
+    this.setState({ typing: '' });
+  };
+
   onChangeMessageInput = e => {
     const typingInfo = {
       username: this.state.loggedUser.username,
@@ -156,11 +172,7 @@ class Chat extends Component {
   render() {
     const { color, name } = this.state.room;
     const users = this.state.users.map((user, i) => {
-      return (
-        <p className='connectedUsers' key={i}>
-          {user}
-        </p>
-      );
+      return user + ' ';
     });
 
     return (
@@ -168,7 +180,7 @@ class Chat extends Component {
         <div className='roomName'>
           <div className='avatar inline' style={{ backgroundColor: color }} />
           <h1 className='inline roomNameHeader'>{name}</h1>
-          {users}
+          <p className='connectedUsers'>{users}</p>
         </div>
         <ChatMessages
           messages={this.state.messages}
@@ -184,6 +196,11 @@ class Chat extends Component {
             onKeyPress={this.handleSendMessage}
             value={this.state.message}
           />
+          {isMobile && (
+            <div onClick={this.handleClickSendMessage} className='sendButton'>
+              <FaTelegramPlane />
+            </div>
+          )}
         </div>
       </div>
     );

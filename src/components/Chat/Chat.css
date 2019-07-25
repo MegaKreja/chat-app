@@ -1,6 +1,8 @@
 .chat {
   text-align: center;
   max-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .roomName {
@@ -10,29 +12,47 @@
   background: #272727;
   border: 2px solid #0a0a0a;
   border-radius: 10px;
-  overflow: auto;
   white-space: nowrap;
 }
 
 .connectedUsers {
-  margin: 0;
+  margin-top: 0;
+  color: #0a5d00;
+  font-weight: bold;
 }
 
 .inputMessage {
+  display: inline;
   width: 80%;
   margin: 0 auto;
   border: 2px solid #0a0a0a;
   font-size: 2rem;
   background: #272727;
   color: white;
-  position: absolute;
+  position: relative;
   right: 0;
   bottom: 0;
   left: 0;
   border-radius: 5px;
+  flex-shrink: 0;
 }
 
 .inputMessage::placeholder {
   color: #666464;
   font-size: 1.5rem;
+}
+
+.sendButton {
+  border-radius: 50px;
+  color: white;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #272727;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  margin: 0 auto;
 }

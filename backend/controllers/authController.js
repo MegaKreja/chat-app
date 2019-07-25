@@ -50,6 +50,15 @@ exports.loginUser = (req, res, next) => {
 exports.getUser = (req, res) => {
   const usertoken = req.headers.authorization;
   const token = usertoken.split(' ');
-  const decoded = jwt.verify(token[1], process.env.SECRET);
-  res.status(200).json({ _id: decoded._id, username: decoded.username });
+  jwt.verify(token[1], process.env.SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(200).json({ expired: true });
+    }
+    return res
+      .status(200)
+      .json({ _id: decoded._id, username: decoded.username });
+  });
+  // const decoded = jwt.verify(token[1], process.env.SECRET);
+  // console.log(decoded);
+  // res.status(200).json({ _id: decoded._id, username: decoded.username });
 };
