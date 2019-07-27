@@ -56,3 +56,24 @@
   border-radius: 50px;
   margin: 0 auto;
 }
+
+@media screen and (max-width: 767px) {
+  .chat {
+    font-size: 10px;
+    max-height: calc(var(--vh, 1vh) * 100);
+  }
+  .roomName {
+    width: 100%;
+  }
+  .inputMessage {
+    width: 100%;
+  }
+  .inputMessage {
+    font-size: 1.2rem;
+  }
+
+  .inputMessage::placeholder {
+    color: #666464;
+    font-size: 0.8rem;
+  }
+}

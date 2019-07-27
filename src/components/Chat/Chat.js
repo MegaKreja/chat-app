@@ -7,6 +7,8 @@ import axios from 'axios';
 import './Chat.css';
 
 const socket = io.connect('http://localhost:8000');
+let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
 
 class Chat extends Component {
   state = {
@@ -137,7 +139,7 @@ class Chat extends Component {
       date: new Date().toLocaleString('en-GB'),
       room: this.state.room
     };
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && this.state.message !== '') {
       socket.emit('send message', sending);
       this.setState({ typing: '' });
     }
@@ -151,8 +153,10 @@ class Chat extends Component {
       date: new Date().toLocaleString('en-GB'),
       room: this.state.room
     };
-    socket.emit('send message', sending);
-    this.setState({ typing: '' });
+    if (this.state.message !== '') {
+      socket.emit('send message', sending);
+      this.setState({ typing: '' });
+    }
   };
 
   onChangeMessageInput = e => {

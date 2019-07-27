@@ -72,3 +72,10 @@
   color: #67676a;
   font-size: 1rem;
 }
+
+@media screen and (max-width: 767px) {
+  .chatMessages {
+    width: 100%;
+    font-size: 10px;
+  }
+}

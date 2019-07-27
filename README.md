@@ -6,10 +6,10 @@ Install packages for both client and backend
 
 `npm install`
 
-Make .env file in root backend folder. It needs to have DB, SECRET, PORT.
+Make .env file in root backend folder. It needs to have MONGODB_URI, SECRET, PORT.
 
 ```
-DB=mongodb+srv://<username>:<password>@cluster0-11111.mongodb.net/chatapp?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0-11111.mongodb.net/chatapp?retryWrites=true&w=majority
 SECRET=somesecretcode
 PORT=8000
 ```

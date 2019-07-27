@@ -12,14 +12,16 @@ class Login extends Component {
     const user = {
       username: this.state.username
     };
-    axios
-      .post('http://localhost:8000/login', user)
-      .then(res => {
-        const token = res.data.token;
-        localStorage.setItem('jwtToken', token);
-        this.props.history.push('/');
-      })
-      .catch(err => this.props.history.push('/login'));
+    if (this.state.username !== '') {
+      axios
+        .post('http://localhost:8000/login', user)
+        .then(res => {
+          const token = res.data.token;
+          localStorage.setItem('jwtToken', token);
+          this.props.history.push('/');
+        })
+        .catch(err => this.props.history.push('/login'));
+    }
   };
 
   loginUserKeyPress = event => {
