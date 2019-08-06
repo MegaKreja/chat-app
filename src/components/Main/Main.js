@@ -5,7 +5,8 @@ import Room from '../Room/Room';
 import AddRoom from '../AddRoom/AddRoom';
 import './Main.css';
 
-const baseUrl = process.env.baseURL || 'http://localhost:8000';
+const baseUrl =
+  'https://chatapp-mern-socketio.herokuapp.com' || 'http://localhost:8000';
 
 class Main extends Component {
   state = {

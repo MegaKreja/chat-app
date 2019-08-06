@@ -3,7 +3,8 @@ import axios from 'axios';
 import { FaCheck } from 'react-icons/fa';
 import './Login.css';
 
-const baseUrl = process.env.baseURL || 'http://localhost:8000';
+const baseUrl =
+  'https://chatapp-mern-socketio.herokuapp.com' || 'http://localhost:8000';
 
 class Login extends Component {
   state = {
