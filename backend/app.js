@@ -1,12 +1,14 @@
 const path = require('path');
 const express = require('express');
 const app = express();
+// const cors = require('cors');
+// app.use(cors());
+// app.options('*', cors());
 
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 
 const Room = require('./models/room');
 
@@ -21,19 +23,21 @@ let roomUsers = {};
 
 require('dotenv').config();
 
-app.use(cors());
-
-app.use(bodyParser.json());
-
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET, POST, PUT, PATCH, DELETE'
   );
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization, X-Requested-With'
+  );
+  // res.header('Access-Control-Allow-Credentials', true);
   next();
 });
+
+app.use(bodyParser.json());
 
 app.use(authRoutes);
 app.use(roomRoutes);
