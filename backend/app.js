@@ -6,6 +6,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const Room = require('./models/room');
 
@@ -19,6 +20,8 @@ const chatRoutes = require('./routes/chat');
 let roomUsers = {};
 
 require('dotenv').config();
+
+app.use(cors());
 
 app.use(bodyParser.json());
 

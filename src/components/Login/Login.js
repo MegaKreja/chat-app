@@ -3,6 +3,8 @@ import axios from 'axios';
 import { FaCheck } from 'react-icons/fa';
 import './Login.css';
 
+const baseUrl = process.env.baseURL || 'http://localhost:8000';
+
 class Login extends Component {
   state = {
     username: ''
@@ -14,7 +16,7 @@ class Login extends Component {
     };
     if (this.state.username !== '') {
       axios
-        .post('http://localhost:8000/login', user)
+        .post(`${baseUrl}/login`, user)
         .then(res => {
           const token = res.data.token;
           localStorage.setItem('jwtToken', token);

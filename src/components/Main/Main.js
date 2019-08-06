@@ -5,6 +5,8 @@ import Room from '../Room/Room';
 import AddRoom from '../AddRoom/AddRoom';
 import './Main.css';
 
+const baseUrl = process.env.baseURL || 'http://localhost:8000';
+
 class Main extends Component {
   state = {
     loggedUser: {},
@@ -30,7 +32,7 @@ class Main extends Component {
 
   getUser = jwt => {
     axios
-      .get('http://localhost:8000/getuser', {
+      .get(`${baseUrl}/getuser`, {
         headers: { Authorization: `Bearer ${jwt}` }
       })
       .then(res => {
@@ -44,7 +46,7 @@ class Main extends Component {
   };
 
   getRooms = () => {
-    axios.get('http://localhost:8000/').then(res => {
+    axios.get(baseUrl).then(res => {
       this.setState({ rooms: res.data.rooms });
     });
   };
@@ -64,7 +66,7 @@ class Main extends Component {
       color: randomColor,
       messages: []
     };
-    axios.post('http://localhost:8000/add', room).then(res => {
+    axios.post(`${baseUrl}/add`, room).then(res => {
       this.setState({
         rooms: [...this.state.rooms, res.data.room],
         addingRoom: false,
@@ -93,7 +95,7 @@ class Main extends Component {
 
   deleteRoom = (id, e) => {
     e.preventDefault();
-    axios.delete('http://localhost:8000/' + id).then(res => {
+    axios.delete(`${baseUrl}/${id}`).then(res => {
       console.log(res);
       this.props.history.push('/');
     });
