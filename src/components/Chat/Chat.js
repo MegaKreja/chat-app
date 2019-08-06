@@ -8,7 +8,9 @@ import './Chat.css';
 
 const baseUrl =
   'https://chatapp-mern-socketio.herokuapp.com' || 'http://localhost:8000';
-const socket = io.connect('http://localhost:8000');
+const socket = io.connect(
+  'https://chatapp-mern-socketio.herokuapp.com' || 'http://localhost:8000'
+);
 let vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh', `${vh}px`);
 
