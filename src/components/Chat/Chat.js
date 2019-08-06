@@ -7,13 +7,9 @@ import axios from 'axios';
 import './Chat.css';
 
 const baseUrl =
-  (process.env.NODE_ENV === 'production' &&
-    'https://chatapp-mern-socketio.herokuapp.com') ||
-  'http://localhost:8000';
+  'https://chatapp-mern-socketio.herokuapp.com' || 'http://localhost:8000';
 const socket = io.connect(
-  (process.env.NODE_ENV === 'production' &&
-    'https://chatapp-mern-socketio.herokuapp.com') ||
-    'http://localhost:8000'
+  'https://chatapp-mern-socketio.herokuapp.com' || 'http://localhost:8000'
 );
 let vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh', `${vh}px`);
