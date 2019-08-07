@@ -6,11 +6,16 @@ import { FaTelegramPlane } from 'react-icons/fa';
 import axios from 'axios';
 import './Chat.css';
 
-const baseUrl =
-  'https://chatapp-mern-socketio.herokuapp.com' || 'http://localhost:8000';
-const socket = io.connect(
-  'https://chatapp-mern-socketio.herokuapp.com' || 'http://localhost:8000'
-);
+let host = window.location.hostname;
+let protocol = window.location.protocol;
+let baseUrl = null;
+if (host === 'localhost') {
+  baseUrl = protocol + '//' + host + ':8000';
+} else {
+  baseUrl = protocol + '//' + host;
+}
+console.log(host, protocol, baseUrl);
+const socket = io.connect(baseUrl);
 let vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh', `${vh}px`);
 

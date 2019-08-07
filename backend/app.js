@@ -1,9 +1,6 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-// const cors = require('cors');
-// app.use(cors());
-// app.options('*', cors());
 
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -16,8 +13,6 @@ const roomRoutes = require('./routes/room');
 const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 
-// global array for displaying users connected in room
-// let users = [];
 // object which collects users per room
 let roomUsers = {};
 
@@ -33,10 +28,11 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers',
     'Content-Type, Authorization, X-Requested-With'
   );
-  // res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Credentials', true);
   next();
 });
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(authRoutes);

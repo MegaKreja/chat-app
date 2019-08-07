@@ -5,8 +5,14 @@ import Room from '../Room/Room';
 import AddRoom from '../AddRoom/AddRoom';
 import './Main.css';
 
-const baseUrl =
-  'https://chatapp-mern-socketio.herokuapp.com' || 'http://localhost:8000';
+let host = window.location.hostname;
+let protocol = window.location.protocol;
+let baseUrl = null;
+if (host === 'localhost') {
+  baseUrl = protocol + '//' + host + ':8000';
+} else {
+  baseUrl = protocol + '//' + host;
+}
 
 class Main extends Component {
   state = {
