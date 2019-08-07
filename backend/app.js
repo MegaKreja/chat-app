@@ -101,6 +101,8 @@ io.on('connection', socket => {
   });
 });
 
+console.log(process.env);
+
 mongoose
   .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
   .then(result => {
